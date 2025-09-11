@@ -115,14 +115,23 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
     @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.BLUE);
-        g2d.fillRect(0, 0, getWidth(), 30);
+
+        for (int i = 0; i <= getWidth(); i++) {
+            int red = (int) 0;
+            int green = (int) 0;
+            int blue = (int) (255 * i / getWidth());
+            g2d.setColor(new Color(red, green, blue));
+            g2d.drawLine(i, 0, i, 30);
+        }
 
         g2d.setColor(Color.WHITE);
         g2d.drawString(getTitle(), 10, 20);
 
         g2d.setColor(Color.RED);
-        g2d.fillOval(getWidth() - 30, 0, 30, 30);
+
+        // Draw Circle at top right corner with gradient
+        g2d.fillOval(getWidth() - 30 + 3, 0 + 3, 30 - 2 * 3, 30 - 2 * 3);
+
         g2d.setColor(Color.WHITE);
         g2d.drawLine(getWidth() - 20, 10, getWidth() - 10, 20);
         g2d.drawLine(getWidth() - 10, 10, getWidth() - 20, 20);
@@ -138,6 +147,8 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
         int posY = getHeight() / 2 - 50;
         g2d.fillOval(posX, posY, 100, 100);
         g2d.setColor(Color.BLACK);
+        g2d.drawOval(posX, posY, 100, 100);
+        g2d.setColor(Color.BLACK);
         g2d.fillOval(posX + 30, posY + 30, 10, 10);
         g2d.fillOval(posX + 60, posY + 30, 10, 10);
         g2d.drawArc(posX + 25, posY + 45, 50, 30, 0, -180);
@@ -149,7 +160,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
 
         Component c[] = this.getComponents();
         c[0].setLocation(10, 40);
-        c[0].setSize(150, 35);
+        c[0].setSize(150, 30);
         c[0].paintAll(g);
 
         g.dispose();
