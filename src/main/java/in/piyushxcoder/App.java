@@ -1,7 +1,6 @@
 package in.piyushxcoder;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -12,6 +11,7 @@ import java.awt.geom.RoundRectangle2D;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Hello world!
@@ -20,6 +20,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
     boolean dragging = false;
     boolean resizing = false;
     int initX = 0, initY = 0;
+    JPanel panel;
 
     public App() {
         setTitle("My Window Bhai log!");
@@ -27,12 +28,25 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
         setUndecorated(true);
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                paintContent(g);
+            }
+        };
+        panel.setLayout(null);
+        
         JButton btn = new JButton("Hello World!");
         btn.addActionListener(e -> {
             App a = new App();
             a.setLocation(getX() + 50, getY() + 50);
         });
-        add(btn);
+        btn.setBounds(10, 40, 150, 30);
+        panel.add(btn);
+        
+        add(panel);
         setResizable(false);
         setVisible(true);
         addMouseMotionListener(this);
@@ -54,7 +68,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
                 return;
             setSize(newW, newH);
             setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 30, 30));
-            repaint();
+            panel.repaint();
         }
 
     }
@@ -84,7 +98,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
             resizing = true;
             initX = relX;
             initY = relY;
-            repaint();
+            panel.repaint();
             return;
         }
 
@@ -92,7 +106,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
             dragging = true;
             initX = relX;
             initY = relY;
-            repaint();
+            panel.repaint();
             return;
         }
     }
@@ -101,7 +115,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
     public void mouseReleased(MouseEvent e) {
         dragging = false;
         resizing = false;
-        repaint();
+        panel.repaint();
     }
 
     @Override
@@ -112,8 +126,7 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
     public void mouseExited(MouseEvent e) {
     }
 
-    @Override
-    public void paint(Graphics g) {
+    private void paintContent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
         for (int i = 0; i <= getWidth(); i++) {
@@ -157,13 +170,6 @@ public class App extends JFrame implements MouseMotionListener, MouseListener {
         g2d.setColor(Color.GRAY);
         g2d.drawLine(getWidth() - 20, getHeight() - 10, getWidth() - 10, getHeight() - 10);
         g2d.drawLine(getWidth() - 10, getHeight() - 20, getWidth() - 10, getHeight() - 10);
-
-        Component c[] = this.getComponents();
-        c[0].setLocation(10, 40);
-        c[0].setSize(150, 30);
-        c[0].paintAll(g);
-
-        g.dispose();
     }
 
     public static void main(String[] args) {
